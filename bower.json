@@ -1,0 +1,10 @@
+{
+  "name": "snat",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-material": "~1.0.2",
+    "angular-route": "~1.4.8",
+    "angular-socket-io": "~0.7.0"
+  }
+}

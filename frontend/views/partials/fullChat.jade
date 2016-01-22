@@ -1,0 +1,19 @@
+md-toolbar.md-whiteframe-glow-z1.contet-toolbar
+	div.md-toolbar-tools(tabindex="-1")
+		button.md-icon-button.md-button.md-ink-ripple.hide-gt-sm(type="button", ng-click="openMenu()", hide-gt-sm, aria-label="")
+			<i class="material-icons">menu</i>
+		h3 {{ currentRoom }}
+md-content(md-scroll-y, layout="column", flex)
+	div.md-whiteframe-z2(flex, ng-repeat="room in roomLog", ng-hide="room.room != currentRoom")
+		ul(flex)
+			li(ng-repeat="msg in room.log")
+				div.chatMsg(layout="row")
+					h3 {{ msg.username }}
+					p {{ msg.content }}
+	div(flex)
+		md-input-container.md-block
+			input(ng-model="newMsg.content", md-maxlength="300", ng-enter='sendMsg(event)')
+			div(ng-messages="newMsg.$error")
+				div(ng-message="spam") No spam allowed!
+		md-input-container
+			md-button(ng-click="sendMsg()") Enviar msj

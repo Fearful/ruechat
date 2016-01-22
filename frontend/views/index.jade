@@ -1,0 +1,33 @@
+doctype html
+html(ng-app="rueChat", ng-controller="mainCtrl", lang="en")
+  include ./header.jade
+  body(layout="row")
+    md-sidenav.site-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-sm')", tabindex="-1", ng-hide="!currentUser")
+      header.nav-header(layout="column", layout-padding)
+        div(layout="row")
+          md-button.md-fab()
+            i.material-icons(style="margin-top:16px;") tag_faces
+          h1.md-heading() {{currentUser.username}}
+        div(layout="column", layout-margin)
+          md-list
+            md-subheader.md-no-sticky Search for chat rooms
+              md-input-container()
+                input(type="text", ng-model="searchQuery", flex="70")
+                span(flex)
+                md-button(ng-click="searchRoom(searchQuery)", style="min-width:30px;")
+                  <i class="material-icons">search</i>
+            md-divider(ng-hide="filteredRooms.length < 1")
+            md-subheader.md-no-sticky(ng-hide="filteredRooms.length < 1") Search results
+              md-list-item(ng-repeat="room in filteredRooms")
+                div.md-list-item-text(layout="column", ng-click="joinRoom(room)")
+                  h3 {{ room }}
+            md-divider
+            md-subheader.md-no-sticky Active chats
+              md-list-item(ng-repeat="chat in roomLog")
+                div.md-list-item-text(layout="column", ng-click="switchRoom(chat)")
+                  h3 {{ chat.room }}
+                  p(ng-bind="chat.log[chat.log.length - 1].content")
+      md-content(flex, role="navigation")
+        ul.menu
+    div(layout="column", tabindex="-1", role="main", flex, ng-view)
+    include ./footer.jade

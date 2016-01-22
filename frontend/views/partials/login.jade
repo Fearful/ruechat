@@ -1,0 +1,17 @@
+md-toolbar.md-whiteframe-glow-z1.contet-toolbar
+	div.md-toolbar-tools(tabindex="-1")
+		h1 Login
+md-content(md-scroll-y, layout="vertical", layout-padding)
+		div(layout="row", layout-align="center center, layout-fill", flex)
+			md-whiteframe.md-whiteframe-z1(layout="column", flex="30", layout-padding)
+				md-content
+					div(layout="row", layout-sm="column")
+						md-input-container(flex="50", flex-sm="100")
+							label User
+							input(ng-model="user.username")
+						md-input-container(flex="50", flex-sm="100")
+							label Password
+							input(ng-model="user.password" type="password")
+					div(layout="row", layout-sm="column", layout-margin, layout-align="center center")
+						md-button.md-raised(flex="50", flex-sm="100", ng-click="login()") Login
+						md-button.md-raised.md-primary(flex="50", flex-sm="100", ng-click="goToRegister()") Register
