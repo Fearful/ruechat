@@ -1,19 +1,39 @@
-md-toolbar.md-whiteframe-glow-z1.contet-toolbar
+md-toolbar.contet-toolbar.md-whiteframe-z2
 	div.md-toolbar-tools(tabindex="-1")
 		button.md-icon-button.md-button.md-ink-ripple.hide-gt-sm(type="button", ng-click="openMenu()", hide-gt-sm, aria-label="")
 			<i class="material-icons">menu</i>
 		h3 {{ currentRoom }}
-md-content(md-scroll-y, layout="column", flex)
-	div.md-whiteframe-z2(flex, ng-repeat="room in roomLog", ng-hide="room.room != currentRoom")
-		ul(flex)
-			li(ng-repeat="msg in room.log")
-				div.chatMsg(layout="row")
-					h3 {{ msg.username }}
-					p {{ msg.content }}
-	div(flex)
-		md-input-container.md-block
-			input(ng-model="newMsg.content", md-maxlength="300", ng-enter='sendMsg(event)')
-			div(ng-messages="newMsg.$error")
-				div(ng-message="spam") No spam allowed!
-		md-input-container
-			md-button(ng-click="sendMsg()") Enviar msj
+		span(flex)
+		md-button(style="min-width:40px;line-height:1;", ng-click="more()", ng-hide="!currentRoom.length")
+			i.material-icons more_horiz
+		md-button(style="min-width:40px;line-height:1;", ng-click="leaveRoom(currentRoom)", ng-hide="!currentRoom.length")
+			i.material-icons close
+md-content(md-scroll-y, layout="row", flex)
+	div(layout="column", flex)
+		div.md-whiteframe-z2(flex, ng-repeat="room in roomLog", ng-hide="room.room != currentRoom", style="min-height: calc(100vh - 160px)")
+			ul(flex)
+				li(ng-repeat="msg in room.log")
+					div.chatMsg(layout="row")
+						h3.md-body-2 {{ msg.username }}
+						p.md-body-1 {{ msg.content }}
+		div(flex, ng-hide="!roomLog.length", layout="row")
+			md-input-container.md-block(flex)
+				input(ng-model="newMsg.content", md-maxlength="300", ng-enter='sendMsg(event)')
+				div(ng-messages="newMsg.$error")
+					div(ng-message="spam") No spam allowed!
+			md-input-container
+				md-button(ng-click="sendMsg()") Enviar msj
+	md-sidenav.md-sidenav-right.md-whiteframe-z2(style="z-index:1;", md-component-id="right", md-is-locked-open="$mdMedia('gt-sm')", tabindex="-1")
+		md-toolbar(layout-padding,style="height:64px;")
+			h3.md-subhead() Advanced view
+		md-content(layout-padding, layout="column")
+			md-input-container
+				label Search user in room
+				input(type="text", ng-model="userQuery")
+			md-list(ng-repeat="room in roomLog", ng-hide="room.room != currentRoom", style="min-height: calc(100vh - 360px)")
+				md-list-item(ng-repeat="user in room.users | filter:userQuery")
+					img.md-avatar(alt="{{ user.username }}", ng-src="{{ user.avatar }}")
+					p {{ user.username }}
+					md-button(ng-click="pmUser(user)", ng-hide="user.username == $root.currentUser.username")
+						i.material-icons chat
+			div()

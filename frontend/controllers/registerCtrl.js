@@ -7,7 +7,7 @@ angular.module('rueChat').controller('registerCtrl', ['$scope', 'Auth', '$locati
 	};
 	$scope.register = function(){
 		Auth.createUser($scope.user, function(data){
-			debugger;
+			$location.path('/');
 		});
 	};
 	$scope.goToLogin = function(){

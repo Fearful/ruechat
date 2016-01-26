@@ -1,5 +1,5 @@
 'use strict';
-angular.module('rueChat').factory('chatService', function ($rootScope, socketFactory) {
+angular.module('rueChat').factory('chatService', function ($rootScope, socketFactory, $timeout) {
 	var chat = {};
 	var socket = socketFactory().connect();
 	socket.on('setup', function(rooms){
@@ -9,8 +9,14 @@ angular.module('rueChat').factory('chatService', function ($rootScope, socketFac
 	chat.join = function(data){
 		socket.emit('join room', data);
 	};
+	chat.leave = function(data){
+		socket.emit('leave room', data);
+	};
 	socket.on('user joined', function(data){
 		$rootScope.$broadcast('user joined', data);
+	});
+	socket.on('user left', function(data){
+		$rootScope.$broadcast('user left', data);
 	});
 	//send msg to a room and update all clients
 	//disconnect from room
@@ -27,6 +33,11 @@ angular.module('rueChat').factory('chatService', function ($rootScope, socketFac
 	socket.on('msg created', function(data){
 		$rootScope.$broadcast('newMsg', data);
 	});
-
+	socket.on('new pm', function(data){
+		$rootScope.$broadcast('new pm', data);
+	});
+	chat.pm = function(data){
+		socket.emit('new chat', data);
+	};
 	return chat;
 });

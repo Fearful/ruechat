@@ -16,7 +16,8 @@ angular.module('rueChat')
 
       logout: function(callback) {
         var cb = callback || angular.noop;
-        $http.delete('/login').then(function(res) {
+        $http.get('/logout').then(function(res) {
+        	localStorage.setItem("rueUser", null);
             $rootScope.currentUser = null;
             return cb();
           });

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', function($scope, chat){
+angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '$timeout', function($scope, chat, $timeout){
 	$scope.newMsg = {
 		content: '',
 		$error: null,
@@ -39,10 +39,19 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', f
 		// 	$scope.newMsg.content = '';
 		// 	return;
 		// }
+		var isPm = false;
+		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
+			if($scope.roomLog[i].room === $scope.currentRoom){
+				if($scope.roomLog[i].pm){
+					isPm = $scope.roomLog[i].roomName;
+				}
+			}
+		};
 		var msg = {
 			username: $scope.$root.currentUser.username,
 			content: $scope.newMsg,
-			room: $scope.currentRoom
+			room: $scope.currentRoom,
+			pm: isPm
 		}
 		// $scope.previousMsg = msg.content;
 		chat.sendMsg(msg);
@@ -51,7 +60,9 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', f
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			if($scope.roomLog[i].room == data.room){
 				$scope.roomLog[i].log.push(data);
-				$scope.$apply();
+				$timeout(function(){
+					$scope.$apply();
+				});
 				return;
 			}
 		};
