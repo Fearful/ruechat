@@ -34,3 +34,8 @@ Development planning
 - The user can search and join any room and multiple at a same time
 - The user can interact with other users inside a room
 - Whenever a user enters a room it displays to other online users notifing that someone has join, the same happens if someone leaves a room or discconnects
+
+
+Dev screencasts:
+- http://screencast.com/t/4xCdERH07cm5
+- http://screencast.com/t/XZg93Ih5ac
