@@ -18,7 +18,7 @@ md-content(md-scroll-y, layout="row", flex)
 						p.md-body-1 {{ msg.content }}
 		div(flex, ng-hide="!roomLog.length", layout="row")
 			md-input-container.md-block(flex)
-				input(ng-model="newMsg.content", md-maxlength="300", ng-enter='sendMsg(event)')
+				input(ng-model="newMsg.content", md-maxlength="300", ng-enter='sendMsg(event)', md-autofocus)
 				div(ng-messages="newMsg.$error")
 					div(ng-message="spam") No spam allowed!
 			md-input-container
@@ -34,6 +34,19 @@ md-content(md-scroll-y, layout="row", flex)
 				md-list-item(ng-repeat="user in room.users | filter:userQuery")
 					img.md-avatar(alt="{{ user.username }}", ng-src="{{ user.avatar }}")
 					p {{ user.username }}
-					md-button(ng-click="pmUser(user)", ng-hide="user.username == $root.currentUser.username")
+					md-checkbox(ng-model="user.selected", ng-show="newGroupChat && user.username != $root.currentUser.username", ng-click="keepOpen()")
+					md-button(style="min-width:40px;line-height:1;",ng-click="pmUser(user)", ng-hide="user.username == $root.currentUser.username")
 						i.material-icons chat
-			div()
+			div(layout="row", style="min-width: 100px;min-height: 100px;width: 300px;margin-left: auto;margin-right: auto;")
+				md-fab-speed-dial.md-fling(md-open="newGroupChat", md-direction="right")
+					md-fab-trigger(flex)
+						md-button.md-fab(flex, style="min-width:40px;line-height:1;")
+							i.material-icons(ng-hide="newGroupChat") group
+							i.material-icons(ng-show="newGroupChat") close
+					md-fab-actions
+						md-button.md-fab(style="min-width:40px;line-height:1;", ng-click="groupChat()")
+							i.material-icons chat_bubble_outline
+						md-button.md-fab(ng-disabled="true", style="min-width:40px;line-height:1;")
+							i.material-icons mic
+						md-button.md-fab(ng-disabled="true", style="min-width:40px;line-height:1;")
+							i.material-icons voice_chat

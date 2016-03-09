@@ -54,6 +54,49 @@ module.exports = function(io){
 				socket.emit('msg created', newMsg);
 			}
 		})
+		socket.on('gChat', function(data){
+			var users = [];
+			var currentSockets = io.sockets.clients().sockets;
+			var arr = Object.keys(currentSockets);
+			var userExists = false;
+			for (var i = arr.length - 1; i >= 0; i--) {
+				for (var e = data.users.length - 1; e >= 0; e--) {
+					if(currentSockets[arr[i]].username == data.users[e].username){
+						data.users[e].socket = currentSockets[arr[i]];
+						users.push(data.users[e]);
+					}
+				};
+			};
+			var cleanUsers = [];
+			for (var i = users.length - 1; i >= 0; i--) {
+				cleanUsers.push({username:users[i].username, selected: false});
+			};
+			cleanUsers.push({username: socket.username, selected: false})
+			socket.join(data.name);
+			for (var i = users.length - 1; i >= 0; i--) {
+				users[i].socket.join(data.name);
+				users[i].socket.emit('new pm', {
+					room: data.name,
+					log: [{
+						content: 'New group chat ' + data.name,
+						room: data.name,
+						username: 'SYSTEM'
+					}],
+					users: cleanUsers,
+					roomName : data.name
+				});
+			};
+			socket.emit('new pm', {
+				room: data.name,
+				log: [{
+					content: 'New group chat ' + data.name,
+					room: data.name,
+					username: 'SYSTEM'
+				}],
+				users: cleanUsers,
+				roomName : data.name
+			});
+		});
 		socket.on('new chat', function(data){
 			var currentSockets = io.sockets.clients().sockets;
 			var arr = Object.keys(currentSockets);

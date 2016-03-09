@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth', 'chatService', '$location', '$timeout', function($scope, $mdSidenav, Auth, chat, $location, $timeout){
+angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth', 'chatService', '$location', '$timeout', '$mdDialog', function($scope, $mdSidenav, Auth, chat, $location, $timeout, $mdDialog){
 	$scope.openMenu = function(){
 		if($scope.isMenuOpen()){ return; }
 		$mdSidenav('left').toggle();
@@ -145,5 +145,55 @@ angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth'
 	});
 	$scope.pmUser = function(user){
 		chat.pm({ to: user.username });
+	};
+	$scope.groupChat = function(){
+		function DialogController($scope, $mdDialog, users) {
+	        $scope.users = users;
+	        $scope.groupName = '';
+	        $scope.create = function(){
+	        	if(this.groupName.length > 0){
+	        		chat.groupChat(this.groupName, users);
+	        	}
+	        	$mdDialog.hide();
+	        }
+	        $scope.closeDialog = function() {
+	          $mdDialog.hide();
+	        }
+	      }
+		var roomWhereTheyMet = false;
+		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
+			if($scope.roomLog[i].room == $scope.currentRoom){
+				roomWhereTheyMet = $scope.roomLog[i];
+			}
+		};
+		if(roomWhereTheyMet){
+			var selectedUsers = roomWhereTheyMet.users.filter(function(obj){return obj.selected});
+			selectedUsers.push({username: $scope.currentUser.username});
+	       var parentEl = angular.element(document.body);
+	       $mdDialog.show({
+	         parent: parentEl,
+	         template: '<md-dialog aria-label="Create new group chat">' +
+			  '<md-dialog-content layout-padding>'+
+			  '<h3>Group Name:</h3>'+
+			   '<md-input-container>' +
+			   	'<input type="text", ng-model="groupName">' +
+			   '</md-input-container>' +
+			    '<md-list>' +
+			      '<md-list-item ng-repeat="user in users">' +
+			        '<p class="md-caption">{{user.username}}</p>' +
+			      '</md-list-item>' +
+			    '</md-list>' +
+			  '</md-dialog-content>' +
+			  '<md-dialog-actions>' +
+			  '<md-button ng-click="create()" class="md-primary">Create Chat</md-button>' +
+			    '<md-button ng-click="closeDialog()" class="md-primary">Close Dialog</md-button>' +
+			  '</md-dialog-actions>' +
+			 '</md-dialog>',
+	         locals: {
+	           users: selectedUsers
+	         },
+	         controller: DialogController
+	      });
+		}
 	};
 }]);

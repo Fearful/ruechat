@@ -14,6 +14,7 @@ var express = require('express'),
 
 var app = module.exports = express(),
   server = require('http').Server(app),
+  p2pserver = require('socket.io-p2p-server').Server,
   io = require('socket.io')(server),
   mongoose = require('mongoose'),
   passport = require('passport'),
@@ -71,3 +72,4 @@ require('./routes/index')(app);
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
+io.use(p2pserver);

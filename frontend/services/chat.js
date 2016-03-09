@@ -39,5 +39,8 @@ angular.module('rueChat').factory('chatService', function ($rootScope, socketFac
 	chat.pm = function(data){
 		socket.emit('new chat', data);
 	};
+	chat.groupChat = function(name, users){
+		socket.emit('gChat', {name: name, users: users});
+	}
 	return chat;
 });

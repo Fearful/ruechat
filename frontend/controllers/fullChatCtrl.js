@@ -8,7 +8,13 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 		bold: false,
 		italic: false
 	};
+	$scope.newGroupChat = false;
 	$scope.previousMsg = '';
+	$scope.keepOpen = function(){
+		$timeout(function(){
+			$scope.newGroupChat = true;
+		}, 100);
+	}
 	function getLevenshteinDistance(a, b){
 		if(a.length == 0){ return b.length };
 		if(b.length == 0){ return a.length };
@@ -57,6 +63,9 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 		chat.sendMsg(msg);
 	}
 	$scope.$root.$on('newMsg', function(event, data){
+		if(data.username == $scope.currentUser.username){
+			$scope.newMsg.content = '';
+		}
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			if($scope.roomLog[i].room == data.room){
 				$scope.roomLog[i].log.push(data);
