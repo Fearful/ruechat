@@ -20,7 +20,7 @@ Development planning
 0.0.1 Missing features
 
 - PMs (DONE)
-- Group chats (private chats - invite only - not saved)
+- Group chats (private chats - invite only - not saved) (DONE)
 - Whisper feature
 - Community driven op commands, ban, silence, banword, ban age, etc
 - Suggest username if already taken
