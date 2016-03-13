@@ -6,6 +6,8 @@ html(ng-app="rueChat", ng-controller="mainCtrl", lang="en")
       md-toolbar.nav-header.md-whiteframe-z2(layout="column", layout-padding, style="height:64px;")
         div(layout="row")
           md-button.md-fab()
+            img(ng-src="{{currentUser.img}}", style="width: 60px;margin: -32px -6px;", ng-show="currentUser.img")
+            input(type="file", onchange="angular.element(this).scope().uploadNewImg(event)", style="margin: -60px;opacity: 0;")
             i.material-icons(style="margin-top:16px;") tag_faces
           h2.md-heading(style="margin-top: 0px;margin-left: 13px;") {{currentUser.username}}
           span(flex)

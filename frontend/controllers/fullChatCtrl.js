@@ -68,6 +68,9 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 		}
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			if($scope.roomLog[i].room == data.room){
+				if($scope.roomLog[i].log.length > 19){
+					$scope.roomLog[i].log.pop();
+				}
 				$scope.roomLog[i].log.push(data);
 				$timeout(function(){
 					$scope.$apply();
@@ -76,4 +79,18 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 			}
 		};
 	});
-}]);
+}]).directive('chatUpdate', function () {
+  return {
+    scope: {
+      room: "="
+    },
+    link: function (scope, element) {
+      scope.$watchCollection('room.log', function (newValue) {
+        if (newValue)
+        {
+          $(element).scrollTop($(element)[0].scrollHeight);
+        }
+      });
+    }
+  }
+});

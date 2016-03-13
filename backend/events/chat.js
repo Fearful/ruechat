@@ -97,6 +97,18 @@ module.exports = function(io){
 				roomName : data.name
 			});
 		});
+		socket.on('nUserImg', function(data){
+			io.sockets.emit('new user img', data);
+			var arr = Object.keys(clients);
+			for (var i = arr.length - 1; i >= 0; i--) {
+				for (var j = clients[arr[i]].length - 1; j >= 0; j--) {
+					if(clients[arr[i]][j].username == data.user){
+						clients[arr[i]][j].img = data.img;
+						return;
+					}
+				};
+			};
+		});
 		socket.on('new chat', function(data){
 			var currentSockets = io.sockets.clients().sockets;
 			var arr = Object.keys(currentSockets);

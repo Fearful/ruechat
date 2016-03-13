@@ -41,6 +41,12 @@ angular.module('rueChat').factory('chatService', function ($rootScope, socketFac
 	};
 	chat.groupChat = function(name, users){
 		socket.emit('gChat', {name: name, users: users});
-	}
+	};
+	chat.newUserImg = function(base64Img, username){
+		socket.emit('nUserImg', {img: base64Img, user: username});
+	};
+	socket.on('new user img', function(data){
+		$rootScope.$broadcast('nui', data);
+	});
 	return chat;
 });

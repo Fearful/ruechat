@@ -24,7 +24,7 @@ Development planning
 - Whisper feature
 - Community driven op commands, ban, silence, banword, ban age, etc
 - Suggest username if already taken
-- Be able to upload a profile picture (none will be saved, either use a free image service and link back or let them upload the picture OR maybe let them upload in js make a thumbnails version transform it into a binary and send it over with the username, storage temporaly inside the log of chat users which destroys each user and its binary image after disconnecting)
+- Be able to upload a profile picture (none will be saved, either use a free image service and link back or let them upload the picture OR maybe let them upload in js make a thumbnails version transform it into a binary and send it over with the username, storage temporaly inside the log of chat users which destroys each user and its binary image after disconnecting) (DONE using base64 encoding and decoding the image in each client)
 
 0.0.0 Current features
 
