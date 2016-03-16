@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '$timeout', function($scope, chat, $timeout){
+angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '$timeout', 'commands', function($scope, chat, $timeout, commands){
 	$scope.newMsg = {
 		content: '',
 		$error: null,
@@ -48,7 +48,11 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 		var isPm = false;
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			if($scope.roomLog[i].room === $scope.currentRoom){
-				if($scope.roomLog[i].pm){
+				if($scope.newMsg.content.indexOf('/') == 0){
+					commands($scope.newMsg, $scope.roomLog[i]);
+					$scope.newMsg.content = '';
+					return;
+				} else if($scope.roomLog[i].pm){
 					isPm = $scope.roomLog[i].roomName;
 				}
 			}
@@ -69,7 +73,7 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			if($scope.roomLog[i].room == data.room){
 				if($scope.roomLog[i].log.length > 19){
-					$scope.roomLog[i].log.pop();
+					$scope.roomLog[i].log.shift();
 				}
 				$scope.roomLog[i].log.push(data);
 				$timeout(function(){
@@ -79,18 +83,13 @@ angular.module('rueChat').controller('fullChatCtrl', ['$scope', 'chatService', '
 			}
 		};
 	});
-}]).directive('chatUpdate', function () {
+}]).directive('chatUpdate', function ($timeout) {
   return {
-    scope: {
-      room: "="
-    },
+    scope: false,
     link: function (scope, element) {
-      scope.$watchCollection('room.log', function (newValue) {
-        if (newValue)
-        {
-          $(element).scrollTop($(element)[0].scrollHeight);
-        }
-      });
+    	$timeout(function(){
+    		element.parent()[0].scrollTop = element.parent()[0].scrollHeight;
+    	});
     }
   }
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth', 'chatService', '$location', '$timeout', '$mdDialog', function($scope, $mdSidenav, Auth, chat, $location, $timeout, $mdDialog){
+angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth', 'chatService', '$location', '$timeout', '$mdDialog', '$mdMenu', function($scope, $mdSidenav, Auth, chat, $location, $timeout, $mdDialog, $mdMenu){
 	$scope.$root.loader.spinner.setComplete();
 	$scope.openMenu = function(){
 		if($scope.isMenuOpen()){ return; }
@@ -18,6 +18,9 @@ angular.module('rueChat').controller('mainCtrl', ['$scope', '$mdSidenav', 'Auth'
 	$scope.$root.$on('roomList', function(event, rooms){
 		$scope.roomList = rooms.rooms;
 	});
+	$scope.openUserMenu = function($mdOpenMenu, event){
+		$mdOpenMenu(event);
+	};
 	$scope.logout = function(){
 		for (var i = $scope.roomLog.length - 1; i >= 0; i--) {
 			$scope.leaveRoom($scope.roomLog[i].room);

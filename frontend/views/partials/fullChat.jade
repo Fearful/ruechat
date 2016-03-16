@@ -11,8 +11,8 @@ md-toolbar.contet-toolbar.md-whiteframe-z2
 md-content(md-scroll-y, layout="row", flex)
 	div(layout="column", flex)
 		div.md-whiteframe-z2.chat(flex, ng-repeat="room in roomLog", ng-hide="room.room != currentRoom", style="min-height: calc(100vh - 160px);overflow-y:scroll;")
-			ul.messages(flex, chat-update)
-				li.message(ng-repeat="msg in room.log")
+			ul.messages(flex)
+				li.message(ng-repeat="msg in room.log", chat-update)
 					div.chatMsg(layout="row", ng-class="{myMessage: msg.username == $root.currentUser.username, fromThem: msg.username != $root.currentUser.username}")
 						p.md-body-1
 							{{ msg.content }}
